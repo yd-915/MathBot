@@ -1,8 +1,13 @@
+// modules
 import { MongoClient } from "mongodb"
-import { Formula } from "./Formula"
-import { MongodbActions } from "./MongodbActions"
 import 'dotenv/config'
 
+// interfaces
+import { Formula } from "./Formula"
+import { MongodbActions } from "./MongodbActions"
+
+
+// types
 import { dbParams } from "../types/dbParams"
 
 
@@ -62,7 +67,6 @@ export class Database implements MongodbActions {
         }
     }
 
-    
 
     private static getQueryBySubtypeState(type: string, subtype: string | undefined): object {
         return subtype == undefined ? {"properties.formula_type": type} : {

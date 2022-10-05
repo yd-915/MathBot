@@ -1,16 +1,19 @@
-//import * as event from '../types/event'
+// modules
 import { Formula } from "../Database/Formula"
 import { Discriminant } from "../Math/MathFunctions"
 import { Area } from "../Math/MathFunctions"
-import { event } from "../types/event"
+import { Sites } from "../Math/MathFunctions"
 import {Database} from "../Database/Database"
 
-
+// types
+import { event } from "../types/event"
 declare type AbstractFormula<T> = any | T
+
+
 
 abstract class FormulasHandler {
 
-    protected static formulas: Array<Formula>
+    protected static formulas: Formula[]
 
     protected static getFormulasToString(): string {
          
@@ -32,7 +35,7 @@ export abstract class EventHandler extends FormulasHandler implements EventHandl
 
     private static discr = new Discriminant()
     private static area = new Area()
-    
+    private static sites = new Sites()
 
     private static database = new Database({
         host: process.env.DB_HOST!,
@@ -46,7 +49,7 @@ export abstract class EventHandler extends FormulasHandler implements EventHandl
         let message: string = ctx.message.text
 
         if (message.slice(0, 1) != "!" && message.slice(0, 1) != "/") {
-            ctx.reply('Unknown command, type "/start" or "!commands" to see available functions')
+            ctx.reply('Unknown command, type "/help" to see available functions')
             return
         }
 
@@ -72,13 +75,14 @@ export abstract class EventHandler extends FormulasHandler implements EventHandl
                 return
             }
 
-            FormulasHandler.formulas = requestedFormulas
+            FormulasHandler.formulas = requestedFormulas as Formula[]
             let reply: string = FormulasHandler.getFormulasToString()
 
             ctx.reply(reply)
             return
         }
 
+        //nearly done
         if (message.slice(1, 13) == "search_type ") {
             const query: string = message.slice(13).toLowerCase()
 
@@ -106,35 +110,13 @@ export abstract class EventHandler extends FormulasHandler implements EventHandl
                 return
             }
 
-            FormulasHandler.formulas = requestedFormulas
+            FormulasHandler.formulas = requestedFormulas as Formula[]
             let reply: string = FormulasHandler.getFormulasToString()
 
             ctx.reply(reply)
             return
 
         }
-
-        // if (message.slice(1, 16) == "search_subtype ") {
-        //     const query: string = message.slice(16).toLowerCase()
-            
-        //     let requestedFormulas: AbstractFormula<Formula> = await this.database.getFormulasBySubtype(query)
-
-        //     if (typeof(requestedFormulas) == "string" || typeof(requestedFormulas) == undefined) {
-        //         ctx.reply("Database error, contact the developer")
-        //         return
-        //     }
-
-        //     if (typeof(requestedFormulas) == null || requestedFormulas.length == 0) {
-        //         ctx.reply("Nothing we can find")
-        //         return
-        //     }
-
-        //     FormulasHandler.formulas = requestedFormulas
-        //     let reply: string = FormulasHandler.getFormulasToString()
-
-        //     ctx.reply(reply)
-        //     return
-        // }
 
         //done
         if (message.slice(1, 7) == "discr ") {
@@ -168,6 +150,44 @@ export abstract class EventHandler extends FormulasHandler implements EventHandl
             )
             return
             
+        }
+
+        //done
+        if (message.slice(1, 16) == "get_third_site ") {
+            message = message.slice(16)
+
+            let first_site: number = 0
+            let second_site: number = 0
+            let angle: number = 0
+
+            let numberEdges: number[] = [0]
+
+
+            for (let i: number = 0; i < message.length; i++) {
+                if (message[i] == " ") {
+                    numberEdges.push(i)
+                }
+            }
+
+
+            if (numberEdges.length < 3) {
+                ctx.reply("Your sites or angle is undefined")
+                return
+            }
+
+            try {
+                first_site = parseInt(message.slice(0, numberEdges[1]))
+                second_site = parseInt(message.slice(numberEdges[1] + 1, numberEdges[2]))
+                angle = parseInt(message.slice(numberEdges[2] + 1))
+            } catch (e) {
+                ctx.reply("Your sites or angle is undefined")
+                return
+            }
+
+            ctx.reply(
+                EventHandler.sites.thirdSiteFromAngle(first_site,second_site,angle)
+            )
+            return
         }
 
         //done
@@ -289,13 +309,7 @@ export abstract class EventHandler extends FormulasHandler implements EventHandl
 
         }
 
-
-        if (message == "/start" || message == "!commands") {
-            
-            return
-        }
-
-        ctx.reply('Unknown command or argument, type "/start" or "!commands" to see available functions')
+        ctx.reply('Unknown command or argument, type "/help" to see available functions')
 
         
     }

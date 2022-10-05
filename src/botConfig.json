@@ -1,0 +1,4 @@
+{
+    "commands_message": "Commands:\n1)/search - searching formulas by name. Type '/search all' to see all formulas.\n2)/search_type - searching formulas by type and subtype. Example: '/search_type physics.temp' or '/search_type physics'.\n3)/discr - solves square equation. To solve type 3 rates with space.\n4)/gen_discr - generates square equations by difficulty: easy, middle, hard.\n5)/get_area_heron - gets you a triangle area by 3 sites. Type 3 sites with spaces.\n6)/get_area_sin - gets triangle area with angle and 2 sites. Type 2 sites of angle, then angle itself.\n7)/get_square_area_sin - gets you area of square by 2 diagonals and angle between them. Type 2 diagonals and angle.\n\nP.S. You can write '/' prefix or '!' prefix in commands.",
+    "greet_message": "This is a math-solver bot, which can do different math actions. Also it is connected to the large formulas database, where oyu can find whatever you want. Type '/help' to see available functions."
+}

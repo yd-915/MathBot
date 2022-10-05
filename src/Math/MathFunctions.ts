@@ -1,9 +1,13 @@
+// interfaces
 import { AreaActions } from "./AreaActions";
 import { DisciminantActions } from "./DiscriminantActions";
+import { SitesActions } from "./SitesActions";
+
+
 
 export class Discriminant implements DisciminantActions {
 
-    public readonly main_formula = "D = b² - 4 * a * c"
+    public readonly discriminant_formula = "D = b² - 4 * a * c"
 
     private static getRandomInt(min: number, max: number): number {
         let randomNum: number = Math.floor(Math.random() * (max - min + 1)) + min
@@ -95,7 +99,7 @@ export class Discriminant implements DisciminantActions {
         answerString += "The discriminant is: " + D.toString()
         answerString += "\nThe first radical is: " + firstRadical.toFixed(3).toString() + "\nThe second radical is: " + secondRadical.toFixed(3).toString() + "\n"
         answerString += (-second_rate).toString() + " +- " + "√" + D.toString() + " \n-------------\n " + (2 * first_rate).toString() 
-        answerString += "\nFrom formula: " + this.main_formula
+        answerString += "\nFrom formula: " + this.discriminant_formula
         
         return answerString
     }
@@ -128,6 +132,7 @@ export class Area implements AreaActions {
     public readonly heron_formula = "S = +√p(p - a)(p - b)(p - c)"
     public readonly triangle_sin_formula = "S = 0.5 * a * b * sin(α)"
     public readonly square_sin_formula = "S = 0.5 * d1 * d2 * sin(α)"
+    private radians_in_deg: number = 0.0174533
 
     public triangleAreaByHeron(first_site: number, second_site: number, third_site: number): string {
         let p: number = (first_site + second_site + third_site) / 2
@@ -136,13 +141,29 @@ export class Area implements AreaActions {
     }
 
     public triangleAreaBySinus(first_site:number, second_site:number, angle:number): string {
-        let area: number = (first_site * second_site * Math.sin(angle)) / 2
+        let area: number = (first_site * second_site * Math.sin(angle * this.radians_in_deg)) / 2
+        console.log(Math.sin(angle))
         return "The area of triagnle is: " + area.toFixed(3).toString() + "\nFrom formula: " + this.triangle_sin_formula
     } 
 
     public squareAreaBySinus(first_diagonal: number, second_diagonal: number, angle: number): string {
-        let area: number = (first_diagonal * second_diagonal * Math.sin(angle)) / 2
+        let area: number = (first_diagonal * second_diagonal * Math.sin(angle * this.radians_in_deg)) / 2
+        
         return "The area of square is: " + area.toFixed(3).toString() + "\nFrom formula: " + this.square_sin_formula
+    }
+
+    
+}
+
+
+export class Sites implements SitesActions {
+
+    public readonly third_site_formula: string = "a² = b² + c² - 2bc * cos(α)"
+    protected radians_in_deg: number = 0.0174533
+
+    public thirdSiteFromAngle(first_site: number, second_site: number, angle: number): string {
+        let thirdSite: number = Math.sqrt((first_site*first_site) + (second_site*second_site) - (2*first_site*second_site*Math.cos(angle*this.radians_in_deg)))
+        return "The third site of triangle is: " + thirdSite.toFixed(2).toString() + "\nFrom formula: " + this.third_site_formula
     }
 
 }
