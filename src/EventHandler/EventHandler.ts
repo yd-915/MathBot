@@ -31,7 +31,8 @@ abstract class FormulasHandler {
 
 }
 
-export abstract class EventHandler extends FormulasHandler implements EventHandler {
+
+export class EventHandler extends FormulasHandler implements EventHandler {
 
     private static discr = new Discriminant()
     private static area = new Area()

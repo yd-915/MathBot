@@ -1,0 +1,1 @@
+npm i telegraf mongodb dotenv
